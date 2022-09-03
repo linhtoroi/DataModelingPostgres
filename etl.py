@@ -1,11 +1,12 @@
 import psycopg2
 import pandas as pd
 import os
+import tqdm
 from sql_queries import insert_table_artists, insert_table_songplays, insert_table_songs,\
      insert_table_time, insert_table_users, create_table_queries, drop_table_queries, check_song_id
 
 def insert_records(cur, conn, insert_query, df):
-    for ind in range(len(df)):
+    for ind in tqdm.tqdm(range(len(df))):
         cur.execute(insert_query, df.values[ind].tolist())
         conn.commit()
 
@@ -72,7 +73,7 @@ def insert_data(log_data, song_data, conn, cursor):
         'artist':songplay_list[3], 'sessionId':songplay_list[4], 'location':songplay_list[5], 'userAgent':songplay_list[6],\
              'length':songplay_list[7]})
 
-    for i in range(len(songplay_df)):
+    for i in tqdm.tqdm(range(len(songplay_df))):
         title = songplay_df['song'].to_list()[i]
         artist_name = songplay_df['artist'].to_list()[i]
         duration = songplay_df['length'].to_list()[i]
